@@ -2,6 +2,7 @@ iTunes ePub Library
 ===================
 
 This repository consists of three main components:
+
 - A php script that searches for epub files and lists them in an xml file
 - the resulting xml file, containing all book information + paths to book covers
 - an xsl file that is used to transform the xml into a nice looking library html file

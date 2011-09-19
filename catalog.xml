@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="lib.xsl"?>
+<library>
+  <book>
+    <title>Empire Burlesque</title>
+    <author>Bob Dylan</author>
+    <year>1985</year>
+    <genre>Roman</genre>
+    <artwork>./image.jpg</artwork>
+  </book>
+  <book>
+    <title>Empire Burlesqueeee</title>
+    <author>Bob Dylanaaaa</author>
+    <year>1988</year>
+    <genre>Test</genre>
+    <artwork>./imagae.jpg</artwork>
+  </book>
+  <book>
+    <title>Empire Burlesqueeedde</title>
+    <author>Bob Dylanaaaaaaaaaaaaaaaaaa</author>
+    <year>1990</year>
+    <genre>Test</genre>
+    <artwork>./imagae.jpg</artwork>
+  </book>
+  <book>
+    <title>Empire Burlesqueeedde</title>
+    <author>Bob Dylanaaaaaaaaaaaaaaaaaa</author>
+    <year>1990</year>
+    <genre>Alpha</genre>
+    <artwork>./imagae.jpg</artwork>
+  </book>
+</library>
