@@ -9,3 +9,5 @@ This repository consists of three main components:
 
 
 The html and css components for the final result have been copied from the Google Chrome Web Store. Because it's an adorable, easily maintainable layout.
+
+![Example HTML](https://github.com/frostrubin/iTunes-ePub-Library/raw/gh-pages/screenshot1.png)
