@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="library.xsl"?>
+<library>
+    <book id="1">
+        <title>Winnie-the-Pooh</title>
+        <author>A. A. Milne</author>
+        <genre>Belletristik für Kinder</genre>
+        <artwork>./artwork/1.png</artwork>
+        <filename>../accelerando.epub</filename>
+    </book>
+    <book id="5">
+        <title>Accelerando</title>
+        <author>Charles Stross</author>
+        <genre>Science Fiction</genre>
+        <artwork>./artwork/5.png</artwork>
+        <filename>../accelerando.epub</filename>
+    </book>
+    <book id="6">
+        <title>Charles Stross Short Stories</title>
+        <author>Charles Stross</author>
+        <genre>Science Fiction</genre>
+        <artwork>./artwork/6.png</artwork>
+        <filename>../accelerando.epub</filename>
+    </book>
+    <book id="66">
+        <title>Verschollen in M 87</title>
+        <author>Perry Rhodan</author>
+        <genre>Science Fiction</genre>
+        <artwork>./artwork/66.png</artwork>
+        <filename>../accelerando.epub</filename>
+    </book>
+</library>
