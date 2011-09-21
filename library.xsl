@@ -23,6 +23,8 @@
       div.g-section.paginator-summary {
         margin-bottom: 10px;
       }
+      
+      #search-box-td {display:none;}
     </style>
       
     <title>Bücher</title>
@@ -58,7 +60,7 @@
                 <img src="./styles/open_book.jpeg" alt="Google Chrome Web Store" /></a>
             </td>
             <td id="signedin-actions" class="signin" style="">
-              <span id="signedin-email">Doris Seeger</span>
+              <span id="signedin-email">Doris Seeger - <xsl:value-of select="count(/library/book)"/> Bücher</span>
               
             </td>
            

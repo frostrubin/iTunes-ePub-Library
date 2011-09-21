@@ -26,7 +26,7 @@
 
 
   $filenames = shell_exec('find '.$directory.' -name "*.epub" > '.$filelist);
-  #$filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
+  $filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
   $lines = file($filelist);
 
   
@@ -43,6 +43,7 @@
     #echo $epubfile."\n";
 
     ///// Get Book Cover and Plist File /////
+    shell_exec('rm '.$artwork.';rm '.$plistfile);
     shell_exec('unzip -pc '.$epubfile.' iTunesArtwork > '.$artwork);
     shell_exec('unzip -pc '.$epubfile.' iTunesMetadata.plist > '.$plistfile);
     //Convert Metadata to XML (some already are xml, some are binary)
@@ -50,7 +51,7 @@
     $plist = shell_exec('cat '.$plistfile);
     
     // Did extracting the cover work?
-    $coverstatus = shell_exec('if [ -s '.$artwork.' ];then cp '.$artwork.' '.$artworkfolder.'/'.$i.'.png; else echo "nocoverfound"; fi');
+    $coverstatus = shell_exec('if [ -s '.$artwork.' ];then cp -f '.$artwork.' '.$artworkfolder.'/'.$i.'.png; else echo "nocoverfound"; fi');
     $coverstatus = ereg_replace("\n", " ", $coverstatus); //remove line breaks
     $coverstatus = ereg_replace("\r", " ", $coverstatus); //remove line breaks
     
@@ -62,10 +63,13 @@
       $coverpath = get_string_between($plist,'<key>cover-image-path', '<key>');
       $coverpath = get_string_between($coverpath,'<string>','</string>');
       
-      shell_exec('unzip -pc '.$epubfile.' '.$coverpath.' > '.$artwork);
-      
-      $coverstatus = shell_exec('if [ -s '.$artwork.' ];then cp '.$artwork.' '.$artworkfolder.'/'.$i.'.png; else echo "nocoverfound"; fi');
+      if ($coverpath != '') {
+        shell_exec('unzip -pc '.$epubfile.' '.$coverpath.' > '.$artwork);
+      }
+      $coverstatus = shell_exec('if [ -s '.$artwork.' ];then cp -f '.$artwork.' '.$artworkfolder.'/'.$i.'.png; else echo "nocoverfound"; fi');
     }
+    // Resize Artwork image to save space and load html faster
+    shell_exec('sips --resampleWidth 52 -s format png '.$artworkfolder.'/'.$i.'.png');
     
     //Get Artist Name
     $artistName = get_string_between($plist,'<key>artistName', '<key>');
@@ -100,6 +104,9 @@
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
     $LibraryArray['library']['book id="'.$i.'"']['filename'] = $filename;
     
+    #if ($i == 22) {
+    #  exit;
+    #}
   }
   
   $xml = new xml(); 
