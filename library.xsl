@@ -47,6 +47,18 @@
           document.getElementById('<xsl:value-of select="." /> bookcount').style.display='block'; 
         </xsl:for-each> 
         }
+        
+        
+        function sidebarHighlightNone() {
+        <xsl:for-each select="library/book/genre[generate-id(.) = generate-id(key('genre', .)[1])]"> 
+          <xsl:sort select="."/>
+          document.getElementById('<xsl:value-of select="." /> sidebaritem').classList.remove('selected');
+        </xsl:for-each>
+        }
+        
+        function sidebarHighlightOne(das) {
+          document.getElementById(das).classList.add('selected');
+        }
         </script> 
   </head>
   <body>
@@ -56,7 +68,7 @@
         <tbody>
           <tr>
             <td>
-              <a href="/webstore" rel="home">
+              <a href="#" rel="home">
                 <img src="./styles/open_book.jpeg" alt="Google Chrome Web Store" /></a>
             </td>
             <td id="signedin-actions" class="signin" style="">
@@ -77,7 +89,7 @@
       </table>
       
       <div class="g-section ">
-        <div class="panel panel-  column-panel" style="width: 155px" role="region">
+        <div class="panel panel-  column-panel" style="width: 156px" role="region">
           <div class="g-section ">
             <div class="panel panel-  " role="region">
               <div class="g-section ">
@@ -85,7 +97,7 @@
                 
                   <xsl:element name="a">
                     <xsl:attribute name="class">category-head</xsl:attribute>
-                    <xsl:attribute name="href">javascript:showAll();</xsl:attribute>
+                    <xsl:attribute name="href">javascript:showAll();sidebarHighlightNone();</xsl:attribute>
                     <div class=" mod-head ">
                       <img class="home-icon" src="./styles/home.png" />Genres
                     </div>
@@ -97,15 +109,13 @@
                         <xsl:for-each select="library/book/genre[generate-id(.) = generate-id(key('genre', .)[1])]"> 
                           <xsl:sort select="."/> 
                             <xsl:element name="a"> 
+                              <xsl:attribute name="id"><xsl:value-of select="." /> sidebaritem</xsl:attribute>
                               <xsl:attribute name="class">category</xsl:attribute> 
-                              <xsl:attribute name="href">javascript:closeAll();anzeigen('<xsl:value-of select="." />');anzeigen('<xsl:value-of select="." /> bookcount');</xsl:attribute> 
+                              <xsl:attribute name="href">javascript:closeAll();anzeigen('<xsl:value-of select="." />');anzeigen('<xsl:value-of select="." /> bookcount');sidebarHighlightNone();sidebarHighlightOne('<xsl:value-of select="." /> sidebaritem');</xsl:attribute> 
                                 
                               <xsl:value-of select="." /> 
                             </xsl:element> 
                           </xsl:for-each> 
-                      <a class="category selected" href="/webstore?category=app%2F8-education">Education</a>
-                      <a class="category" href="/webstore?category=app%2F2-entertainment">Entertainment</a>
-                      <a class="category" href="/webstore?category=app%2F9-utilities">Utilities</a>
                     </div>
                   </div>
                 </div>

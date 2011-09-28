@@ -1,8 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-  $directory = '/pub/Mediathek/eBooks/Bücher';
+  $directory  = '/pub/Mediathek/eBooks/Bücher';
   $directory2 = '/pub/Mediathek/eBooks/Spiegel\ Bestseller\ 2010';
+  $directory3 = '/pub/Mediathek/eBooks/Comics';
+  $replacepath = '/pub/Mediathek/eBooks/';
+  $replacementpath = '../';
   $filelist = '/tmp/ebookfilelist.txt';
   $artwork = '/tmp/Artwork.png';
   $plistfile = '/tmp/plist.plist';
@@ -12,6 +15,10 @@
   $xmlOutFile = '/Users/bernhard/Desktop/chromestore/library.xml';
   $htmlOutFile = '/Users/bernhard/Desktop/chromestore/index.html';
   
+  
+  #### testweise
+  $directory = '/Users/bernhard/Desktop/directory';
+  $replacepath = '/Users/bernhard/Desktop/';
 
   require_once('arraytoxml.php'); 
 
@@ -24,15 +31,18 @@
    return substr($string,$ini,$len);
   }
 
+  shell_exec('rm '.$filelist);
 
   $filenames = shell_exec('find '.$directory.' -name "*.epub" > '.$filelist);
-  $filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
+  # $filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
   $lines = file($filelist);
 
   
   $i = 0;
   foreach ($lines as $epubfile) {
     $i = $i + 1;
+    $linkfile = $epubfile;
+    $linkfile = str_replace($replacepath, $replacementpath, $linkfile);
     $epubfile = str_replace(' ', '\ ', $epubfile);
     $epubfile = str_replace("'", "\'", $epubfile);
     $epubfile = str_replace("(", "\(", $epubfile);
@@ -96,17 +106,56 @@
       continue;
     }
     echo $artistName.' - '.$itemName.' - '.$genre."\n";
-    $filename = '../accelerando.epub';
     
     $LibraryArray['library']['book id="'.$i.'"']['title']  = $itemName;
     $LibraryArray['library']['book id="'.$i.'"']['author'] = $artistName;
     $LibraryArray['library']['book id="'.$i.'"']['genre']  = $genre;
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
-    $LibraryArray['library']['book id="'.$i.'"']['filename'] = $filename;
+    $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
     
-    #if ($i == 22) {
-    #  exit;
-    #}
+    if ($i == 18) {
+      break;
+    }
+  } // ende des loops für epubs
+  
+  $filenames = shell_exec('find '.$directory.' -name "*.pdf" > '.$filelist);
+  #$filenames = shell_exec('find '.$directory2.' -name "*.pdf" >> '.$filelist);
+  $lines = file($filelist);
+  
+  foreach ($lines as $pdffile) {
+    $i = $i + 1;
+    $linkfile = $pdffile;
+    $linkfile = str_replace($replacepath, $replacementpath, $linkfile);
+    $pdffile = str_replace(' ', '\ ', $pdffile);
+    $pdffile = str_replace("'", "\'", $pdffile);
+    $pdffile = str_replace("(", "\(", $pdffile);
+    $pdffile = str_replace(")", "\)", $pdffile);
+    $pdffile = str_replace("&", "\&", $pdffile);
+    $pdffile = ereg_replace("\n", " ", $pdffile); //remove line breaks
+    $pdffile = ereg_replace("\r", " ", $pdffile); //remove line breaks
+    #echo $pdffile."\n";
+    
+    ///// Get Book Cover /////
+    shell_exec('sips -s format png '.$pdffile.' --out '.$artworkfolder.'/'.$i.'.png');
+    shell_exec('sips --resampleWidth 52 -s format png '.$artworkfolder.'/'.$i.'.png');
+    
+    ///// Get Title /////
+    $title = shell_exec('basename '.$pdffile);
+    $genre = 'PDF Datei';
+    $author = shell_exec('echo $(basename $(dirname '.$pdffile.'))');
+    echo $author;
+   
+    echo 'pdf '.$title.' - '.$genre."\n";
+    echo $i;
+    
+    $LibraryArray['library']['book id="'.$i.'"']['title']  = $title;
+    $LibraryArray['library']['book id="'.$i.'"']['author'] = $author;
+    $LibraryArray['library']['book id="'.$i.'"']['genre']  = $genre;
+    $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
+    $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
+    if ($i == 30) {
+      break;
+    }
   }
   
   $xml = new xml(); 
