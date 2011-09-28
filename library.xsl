@@ -38,6 +38,7 @@
             <xsl:sort select="."/> 
             document.getElementById('<xsl:value-of select="." />').style.display='none'; 
             document.getElementById('<xsl:value-of select="." /> bookcount').style.display='none';
+            document.getElementById('listofallauthors').style.display='none';
           </xsl:for-each> 
         } 
         function showAll() {
@@ -125,8 +126,8 @@
            <div class="panel panel-  " role="region">
              <div class="g-section ">
                <div class="category-panel" role="navigation">
-                 <a class="category-head" href="#">
-                   <div class=" mod-head ">Extensions</div>
+                 <a class="category-head" href="javascript:closeAll();sidebarHighlightNone();anzeigen('listofallauthors');">
+                   <div class=" mod-head ">Autoren</div>
                  </a>
                  <div class="mod-body">
                    <div id="ext-category" class="category-list">
@@ -205,7 +206,48 @@
                   <xsl:attribute name="id"><xsl:value-of select="." /> bookcount</xsl:attribute>
                   Insgesamt <xsl:value-of select="count(/library/book[genre = $wert])" /> Bücher
                 </xsl:element>
-              </xsl:for-each> 
+              </xsl:for-each>
+              
+              
+              
+              
+              
+              <div class="mod-fullpage" id="listofallauthors">
+                <div class="mod-head" style="">
+                  <div style="">
+                    <div class="navi-path">
+                      <span class=" navi-item">Liste aller Autoren</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="mod-body">
+                                    
+                  <xsl:for-each select="/library/book"> 
+                    <xsl:sort select="author"/> 
+                    <span class="mod-tiles-item hovercard-anchor" cxhovercard="gklfihmmokekepifllhpdlkobiplpklj">
+                      <xsl:element name="img">
+                        <xsl:attribute name="class">mod-tiles-logo float-left</xsl:attribute>
+                        <xsl:attribute name="src"><xsl:value-of select="artwork"/></xsl:attribute>
+                      </xsl:element>
+                      
+                      <div class="mod-tiles-info">
+                        <b><xsl:value-of select="title"/></b>
+                        <div class="mod-tiles-category"><xsl:value-of select="author"/></div>
+                        <xsl:element name="a">
+                          <xsl:attribute name="href"><xsl:value-of select="filename"/></xsl:attribute>
+                          Download
+                        </xsl:element>
+                      </div>
+                    </span>
+                  </xsl:for-each> 
+                </div>
+              </div>
+              
+              
+              
+              
+              
+              
               
   
               </div>

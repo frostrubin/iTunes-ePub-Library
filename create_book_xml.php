@@ -17,8 +17,8 @@
   
   
   #### testweise
-  $directory = '/Users/bernhard/Desktop/directory';
-  $replacepath = '/Users/bernhard/Desktop/';
+#  $directory = '/Users/bernhard/Desktop/directory';
+#  $replacepath = '/Users/bernhard/Desktop/';
 
   require_once('arraytoxml.php'); 
 
@@ -34,7 +34,7 @@
   shell_exec('rm '.$filelist);
 
   $filenames = shell_exec('find '.$directory.' -name "*.epub" > '.$filelist);
-  # $filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
+  $filenames = shell_exec('find '.$directory2.' -name "*.epub" >> '.$filelist);
   $lines = file($filelist);
 
   
@@ -96,16 +96,12 @@
     // Generate a Genre ID
     if ($genre == '') {
       $genre   = 'Empty';
-      $genreID = 'empty';
-    } else {
-      $genreID = strtolower(preg_replace('/[^A-Za-z]/', '', $genre));
-      echo $genreID;
-    }
+    } 
     
     if ($artistName == '') {
       continue;
     }
-    echo $artistName.' - '.$itemName.' - '.$genre."\n";
+    echo $i - $artistName.' - '.$itemName.' - '.$genre."\n";
     
     $LibraryArray['library']['book id="'.$i.'"']['title']  = $itemName;
     $LibraryArray['library']['book id="'.$i.'"']['author'] = $artistName;
@@ -113,13 +109,13 @@
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
     $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
     
-    if ($i == 18) {
-      break;
-    }
+    # if ($i == 18) {
+    #  break;
+    #}
   } // ende des loops für epubs
   
   $filenames = shell_exec('find '.$directory.' -name "*.pdf" > '.$filelist);
-  #$filenames = shell_exec('find '.$directory2.' -name "*.pdf" >> '.$filelist);
+  $filenames = shell_exec('find '.$directory2.' -name "*.pdf" >> '.$filelist);
   $lines = file($filelist);
   
   foreach ($lines as $pdffile) {
@@ -141,21 +137,23 @@
     
     ///// Get Title /////
     $title = shell_exec('basename '.$pdffile);
+    $title = ereg_replace("\n", "", $title);
+    $title = ereg_replace("\r", "", $title);
     $genre = 'PDF Datei';
-    $author = shell_exec('echo $(basename $(dirname '.$pdffile.'))');
-    echo $author;
-   
-    echo 'pdf '.$title.' - '.$genre."\n";
-    echo $i;
+    $author = shell_exec('var=`dirname '.$pdffile.'`;basename "$var"');
+    $author = ereg_replace("\n", "", $author);
+    $author = ereg_replace("\r", "", $author);
+ 
+    echo $i - $author.' - '.$title.' - '.$genre."\n";
     
     $LibraryArray['library']['book id="'.$i.'"']['title']  = $title;
     $LibraryArray['library']['book id="'.$i.'"']['author'] = $author;
     $LibraryArray['library']['book id="'.$i.'"']['genre']  = $genre;
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
     $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
-    if ($i == 30) {
-      break;
-    }
+    #if ($i == 30) {
+    #  break;
+    #}
   }
   
   $xml = new xml(); 
