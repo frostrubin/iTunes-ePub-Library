@@ -3,7 +3,7 @@
 
   $directory  = '/pub/Mediathek/eBooks/Bücher';
   $directory2 = '/pub/Mediathek/eBooks/Spiegel\ Bestseller\ 2010';
-  $directory3 = '/pub/Mediathek/eBooks/Comics';
+  $directory3 = '/Users/bernhard/Desktop/Comics';
   $replacepath = '/pub/Mediathek/eBooks/';
   $replacementpath = '../';
   $filelist = '/tmp/ebookfilelist.txt';
@@ -109,7 +109,7 @@
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
     $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
     
-    # if ($i == 18) {
+    #if ($i == 2) {
     #  break;
     #}
   } // ende des loops für epubs
@@ -151,9 +151,48 @@
     $LibraryArray['library']['book id="'.$i.'"']['genre']  = $genre;
     $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
     $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
-    #if ($i == 30) {
-    #  break;
+    #if ($i == 5) {
+    # break;
     #}
+  } // ende des loops für pdfs
+  
+  $filenames = shell_exec('find '.$directory3.' -name "*.png" > '.$filelist);
+  $lines = file($filelist);
+  
+  foreach ($lines as $pngfile) {
+    $i = $i + 1;
+    $linkfile = $pngfile;
+    $linkfile = str_replace($replacepath, $replacementpath, $pngfile);
+    $linkfile = str_replace('.png','.pdf',$linkfile);
+    
+    $pngfile = str_replace(' ', '\ ', $pngfile);
+    $pngfile = str_replace("'", "\'", $pngfile);
+    $pngfile = str_replace("(", "\(", $pngfile);
+    $pngfile = str_replace(")", "\)", $pngfile);
+    $pngfile = str_replace("&", "\&", $pngfile);
+    $pngfile = ereg_replace("\n", " ", $pngfile); //remove line breaks
+    $pngfile = ereg_replace("\r", " ", $pngfile); //remove line breaks
+    
+    /// Cover
+    shell_exec('sips -s format png '.$pngfile.' --out '.$artworkfolder.'/'.$i.'.png');
+    shell_exec('sips --resampleWidth 52 -s format png '.$artworkfolder.'/'.$i.'.png');
+    
+    /// Metadata
+    $title = shell_exec('basename '.$pngfile);
+    $title = ereg_replace("\n", "", $title);
+    $title = ereg_replace("\r", "", $title);
+    $genre = 'Comic';
+    $author = shell_exec('var=`dirname '.$pngfile.'`;basename "$var"');
+    $author = ereg_replace("\n", "", $author);
+    $author = ereg_replace("\r", "", $author);
+    
+    echo $i - $author.' - '.$title.' - '.$genre."\n";
+    
+    $LibraryArray['library']['book id="'.$i.'"']['title']  = $title;
+    $LibraryArray['library']['book id="'.$i.'"']['author'] = $author;
+    $LibraryArray['library']['book id="'.$i.'"']['genre']  = $genre;
+    $LibraryArray['library']['book id="'.$i.'"']['artwork'] = $relativeartworkfolder.'/'.$i.'.png';
+    $LibraryArray['library']['book id="'.$i.'"']['filename'] = $linkfile;
   }
   
   $xml = new xml(); 
@@ -163,6 +202,9 @@
   $file = fopen ($xmlOutFile, "w"); 
   fwrite($file, $xmlOutput); 
   fclose ($file);
+  
+  shell_exec('rm '.$artworkfolder.'/.*');
+
   
   
   // Chrome cannot open local xslt stylesheets. So we generate a html
