@@ -3,17 +3,17 @@
 
   $directory  = '/pub/Mediathek/eBooks/Bücher';
   $directory2 = '/pub/Mediathek/eBooks/Spiegel\ Bestseller\ 2010';
-  $directory3 = '/Users/bernhard/Desktop/Comics';
+  $directory3 = '/pub/Mediathek/eBooks/Comics';
   $replacepath = '/pub/Mediathek/eBooks/';
   $replacementpath = '../';
   $filelist = '/tmp/ebookfilelist.txt';
   $artwork = '/tmp/Artwork.png';
   $plistfile = '/tmp/plist.plist';
-  $artworkfolder = '/Users/bernhard/Desktop/chromestore/artwork';
+  $artworkfolder = '/pub/Mediathek/eBooks/_bookstore/artwork';
   $relativeartworkfolder = './artwork';
-  $xslOutFile = '/Users/bernhard/Desktop/chromestore/library.xsl';
-  $xmlOutFile = '/Users/bernhard/Desktop/chromestore/library.xml';
-  $htmlOutFile = '/Users/bernhard/Desktop/chromestore/index.html';
+  $xslOutFile = '/pub/Mediathek/eBooks/_bookstore/library.xsl';
+  $xmlOutFile = '/pub/Mediathek/eBooks/_bookstore/library.xml';
+  $htmlOutFile = '/pub/Mediathek/eBooks/_bookstore/index.html';
   
   
   #### testweise
@@ -31,6 +31,8 @@
    return substr($string,$ini,$len);
   }
 
+  shell_exec('rm -rf '.$artworkfolder);
+  shell_exec('mkdir '.$artworkfolder);
   shell_exec('rm '.$filelist);
 
   $filenames = shell_exec('find '.$directory.' -name "*.epub" > '.$filelist);
@@ -181,6 +183,7 @@
     $title = shell_exec('basename '.$pngfile);
     $title = ereg_replace("\n", "", $title);
     $title = ereg_replace("\r", "", $title);
+    $title = str_replace(".png", "", $title);
     $genre = 'Comic';
     $author = shell_exec('var=`dirname '.$pngfile.'`;basename "$var"');
     $author = ereg_replace("\n", "", $author);

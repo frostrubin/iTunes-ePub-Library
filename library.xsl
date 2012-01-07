@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="SHORTCUT ICON" type="image/ico" href="https://www.google.com/images/icons/product/chrome_web_store-16.png" />
+    <link rel="SHORTCUT ICON" type="image/ico" href="favicon.ico" />
     
     <link rel="stylesheet" type="text/css" href="./styles/webstore.css" />
     <style type="text/css">
@@ -190,6 +190,7 @@
                           <div class="mod-tiles-info">
                             <b><xsl:value-of select="title"/></b>
                             <div class="mod-tiles-category"><xsl:value-of select="author"/></div>
+                            <div class="mod-tiles-category"><xsl:value-of select="genre" /></div>
                             <xsl:element name="a">
                               <xsl:attribute name="href"><xsl:value-of select="filename"/></xsl:attribute>
                               Download
